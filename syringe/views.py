@@ -1,18 +1,19 @@
-import inspect
 from .response import Response
+from .request import Request
 
 
 class View:
+
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         cls._allowed_methods = [
             m.upper()
-            for m in ["get", "post", "put", "delete"]
+            for m in ["get", "post", "put", "patch", "delete"]
             if callable(getattr(cls, m, None))
         ]
 
-    def dispatch(self, request):
-        handler = getattr(self, request.method.lower(), None)
+    def dispatch(self, request: Request) -> Response:
+        handler: callable[Request] = getattr(self, request.method.lower(), None)
         if handler is None:
             return Response("Method Not Allowed", 405)
         return handler(request)

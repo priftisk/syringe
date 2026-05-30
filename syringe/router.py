@@ -27,7 +27,7 @@ class Router:
         if target is None:
             return None
 
-        if inspect.isclass(target):
+        if inspect.isclass(target) and issubclass(target, View):  # If View class
 
             def handler(req):
                 view = target()
