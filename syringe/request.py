@@ -9,4 +9,5 @@ class Request:
     def __init__(self, raw: str):
         self._raw = raw
         first_line = raw.split("\r\n")[0]
-        self.method, self.path, *_ = first_line.split()
+        self.method, self._raw_path, *_ = first_line.split()
+        self.path = self._raw_path.split("?")[0]  # clean path for routing

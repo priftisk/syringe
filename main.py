@@ -1,8 +1,8 @@
 import socket
 from syringe.router import Router
 from views import ArticleView, SearchView
-from syringe.util.response import make_response
 from syringe.request import Request
+from syringe.response import Response
 
 router = Router()
 
@@ -10,16 +10,19 @@ router.route("/articles")(ArticleView)
 router.route("/search")(SearchView)
 
 
-def handle(raw: str) -> str:
+def handle(raw: str) -> bytes:
     try:
-        request = Request(raw)
-    except ValueError:
-        return make_response("Bad Request", 500)
-    handler = router.resolve(request.method, request.path)
+        req = Request(raw)
+    except (ValueError, IndexError):
+        return bytes(Response("Bad Request", 500))
+
+    handler = router.resolve(req)
     if handler is None:
-        return make_response("<h1>404 Not Found</h1>", 404)
-    body, status = handler()
-    return make_response(body, status)
+        return bytes(Response("<h1>404 Not Found</h1>", 404))
+    response: tuple[Response, int] = handler(
+        req
+    )  # handler returns a Response, status tuple
+    return bytes(response[0])
 
 
 def run(host="127.0.0.1", port=9999):
@@ -28,13 +31,11 @@ def run(host="127.0.0.1", port=9999):
     server.bind((host, port))
     server.listen(5)
     print(f"Serving on http://{host}:{port}")
-
     while True:
-        conn, addr = server.accept()
+        conn, _ = server.accept()
         try:
             raw = conn.recv(4096).decode("utf-8")
-            response = handle(raw)
-            conn.sendall(response.encode("utf-8"))
+            conn.sendall(handle(raw))
         finally:
             conn.close()
 

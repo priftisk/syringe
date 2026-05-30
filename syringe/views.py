@@ -10,8 +10,8 @@ class View:
             if callable(getattr(cls, m, None))
         ]
 
-    def dispatch(self, method, *args, **kwargs):
-        handler = getattr(self, method.lower(), None)
+    def dispatch(self, request):
+        handler = getattr(self, request.method.lower(), None)
         if handler is None:
             return f"405 Method Not Allowed", 405
-        return handler(*args, **kwargs), 200
+        return handler(request), 200

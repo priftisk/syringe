@@ -1,4 +1,6 @@
 import inspect
+from views import View
+from .response import Response
 
 
 class Router:
@@ -19,13 +21,15 @@ class Router:
 
         return decorator
 
-    def resolve(self, method, path):
-        path = path.split("?")[0]  # strip query string
-        target = self._routes.get(f"{method} {path}")
+    def resolve(self, request):
+        target = self._routes.get(f"{request.method} {request.path}")
         if target is None:
             return None
-        if inspect.isclass(target):  # if is view
-            # instantiate and dispatch — one new instance per request
-            body, status = target().dispatch(method)
-            return lambda: (body, status)
-        return lambda: (target, 200)
+
+        if inspect.isclass(target):
+            view_instance: View = target()
+            body, status = view_instance.dispatch(request)
+
+            return lambda _: (body, status)
+
+        return lambda req: (target(req), 200)

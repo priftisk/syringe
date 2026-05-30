@@ -1,15 +1,13 @@
 class QueryParams:
-    def __get__(self, obj, objType=None):
+    def __get__(self, obj, objtype=None):
         if obj is None:
             return self
-        if "_query_params_cache" not in obj.__dict__:
-            obj.__dict__["_query_params_cache"] = self._parse(obj.path)
-        return obj.__dict__["_query_params_cache"]
+        if "_query_cache" not in obj.__dict__:
 
-    def _parse(self, raw_path: str):
-        raw_params = raw_path.split("?")[1]
-        dct = {}
-        for raw_p in raw_params.split("&"):
-            p_name, p_val = raw_p.split("=", 1)
-            dct[p_name] = p_val
-        return dct
+            qs = obj._raw_path.partition("?")[2]  # "" if no "?"
+            obj.__dict__["_query_cache"] = (
+                dict(pair.split("=", 1) for pair in qs.split("&") if "=" in pair)
+                if qs
+                else {}
+            )
+        return obj.__dict__["_query_cache"]
