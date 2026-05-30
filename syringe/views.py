@@ -1,4 +1,5 @@
 import inspect
+from .response import Response
 
 
 class View:
@@ -13,5 +14,5 @@ class View:
     def dispatch(self, request):
         handler = getattr(self, request.method.lower(), None)
         if handler is None:
-            return f"405 Method Not Allowed", 405
-        return handler(request), 200
+            return Response("Method Not Allowed", 405)
+        return handler(request)

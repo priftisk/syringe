@@ -3,11 +3,13 @@ from syringe.router import Router
 from views import ArticleView, SearchView
 from syringe.request import Request
 from syringe.response import Response
+from syringe.middleware import logging_middleware, apply_middlewares
 
 router = Router()
 
 router.route("/articles")(ArticleView)
 router.route("/search")(SearchView)
+middlewares = [logging_middleware]
 
 
 def handle(raw: str) -> bytes:
@@ -17,12 +19,15 @@ def handle(raw: str) -> bytes:
         return bytes(Response("Bad Request", 500))
 
     handler = router.resolve(req)
+
     if handler is None:
         return bytes(Response("<h1>404 Not Found</h1>", 404))
-    response: tuple[Response, int] = handler(
-        req
-    )  # handler returns a Response, status tuple
-    return bytes(response[0])
+
+    handler = apply_middlewares(handler=handler, middlewares=middlewares)
+
+    response: Response = handler(req)
+
+    return bytes(response)
 
 
 def run(host="127.0.0.1", port=9999):
