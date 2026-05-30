@@ -15,11 +15,3 @@ class View:
         if handler is None:
             return f"405 Method Not Allowed", 405
         return handler(*args, **kwargs), 200
-
-
-class ArticleView(View):
-    def get(self):
-        return "<h1>All articles</h1>"
-
-    def post(self):
-        return "<p>Article created</p>"

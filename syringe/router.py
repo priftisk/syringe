@@ -24,9 +24,8 @@ class Router:
         target = self._routes.get(f"{method} {path}")
         if target is None:
             return None
-        if inspect.isclass(target):
+        if inspect.isclass(target):  # if is view
             # instantiate and dispatch — one new instance per request
             body, status = target().dispatch(method)
             return lambda: (body, status)
-
         return lambda: (target, 200)

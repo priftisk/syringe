@@ -10,3 +10,9 @@ class ArticleView(View):
 
     def patch(self):
         return "Article patched!"
+
+
+class SearchView(View):
+    def get(self):
+
+        return f"Searching"

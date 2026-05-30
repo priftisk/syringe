@@ -1,24 +1,23 @@
 import socket
 from syringe.router import Router
-from views import ArticleView
+from views import ArticleView, SearchView
 from syringe.util.response import make_response
+from syringe.request import Request
 
 router = Router()
 
 router.route("/articles")(ArticleView)
+router.route("/search")(SearchView)
 
 
 def handle(raw: str) -> str:
     try:
-        method, path, *_ = raw.split("\r\n")[0].split()
+        request = Request(raw)
     except ValueError:
         return make_response("Bad Request", 500)
-
-    handler = router.resolve(method, path)
-    print(handler)
+    handler = router.resolve(request.method, request.path)
     if handler is None:
         return make_response("<h1>404 Not Found</h1>", 404)
-
     body, status = handler()
     return make_response(body, status)
 

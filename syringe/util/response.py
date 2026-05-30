@@ -7,3 +7,8 @@ def make_response(body, status=200, content_type="text/html"):
         f"Content-Length: {len(body.encode())}\r\n"
         "\r\n" + body
     )
+
+
+class Response:
+    def __bytes__(self):
+        pass
