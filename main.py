@@ -1,45 +1,26 @@
 import socket
-from router import Router
+from syringe.router import Router
+from views import ArticleView
+from syringe.util.response import make_response
 
 router = Router()
 
-
-@router.route("/hello")
-def hello():
-    return "<h1>Hello, World!</h1>"
-
-
-@router.route("/bye")
-def bye():
-    return "<h1>Goodbye!</h1>"
-
-
-def make_response(body, status=200, content_type="text/html"):
-    """Build a raw HTTP/1.1 response string."""
-    status_text = {200: "OK", 404: "Not Found", 500: "Internal Server Error"}
-    return (
-        f"HTTP/1.1 {status} {status_text[status]}\r\n"
-        f"Content-Type: {content_type}\r\n"
-        f"Content-Length: {len(body.encode())}\r\n"
-        "\r\n" + body
-    )
+router.route("/articles")(ArticleView)
 
 
 def handle(raw: str) -> str:
-    """Parse the request, resolve a handler, return a response string."""
     try:
-        first_line = raw.split("\r\n")[0]
-        method, path, *_ = first_line.split()
+        method, path, *_ = raw.split("\r\n")[0].split()
     except ValueError:
         return make_response("Bad Request", 500)
 
     handler = router.resolve(method, path)
-
+    print(handler)
     if handler is None:
-        return make_response("<h1>404 — Not Found</h1>", 404)
+        return make_response("<h1>404 Not Found</h1>", 404)
 
-    body = handler()
-    return make_response(body)
+    body, status = handler()
+    return make_response(body, status)
 
 
 def run(host="127.0.0.1", port=9999):
