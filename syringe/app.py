@@ -18,8 +18,6 @@ class SyringeApp:
 
     def __call__(self, request):
         handler = self.router.resolve(request)
-        if handler is None:
-            return Response("<h1>404 Not Found</h1>", status=404)
         wrapped = apply_middlewares(handler, self.middlewares)
         return wrapped(request)
 

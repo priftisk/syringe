@@ -4,7 +4,7 @@ class QueryParams:
             return self
         if "_query_cache" not in obj.__dict__:
 
-            qs = obj._raw_path.partition("?")[2]  # "" if no "?"
+            qs = obj._raw_path.partition("?")[2]
             obj.__dict__["_query_cache"] = (
                 dict(pair.split("=", 1) for pair in qs.split("&") if "=" in pair)
                 if qs

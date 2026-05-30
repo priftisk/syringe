@@ -15,8 +15,8 @@ app.use(not_found_middleware)
 #     return Response("Hello")
 
 
-app.router.route("/articles")(ArticleView)
-app.router.route("/search")(SearchView)
+app.route("/articles")(ArticleView)
+app.route("/search")(SearchView)
 
 if __name__ == "__main__":
     app.run()
