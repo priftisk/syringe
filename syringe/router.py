@@ -23,13 +23,17 @@ class Router:
 
     def resolve(self, request):
         target = self._routes.get(f"{request.method} {request.path}")
+
         if target is None:
             return None
 
         if inspect.isclass(target):
-            view_instance: View = target()
-            body, status = view_instance.dispatch(request)
 
-            return lambda _: (body, status)
+            def handler(req):
+                view = target()
+                response = view.dispatch(req)
+                return response
 
-        return lambda req: (target(req), 200)
+            return handler
+
+        return target
