@@ -1,6 +1,4 @@
 from views import ArticleView, SearchView
-
-# from syringe.response import Response
 from syringe.app import SyringeApp
 from syringe.middleware import logging_middleware, not_found_middleware
 

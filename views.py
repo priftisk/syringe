@@ -1,4 +1,4 @@
-from syringe.views import View
+from syringe.views.base import View
 from syringe.response import Response
 
 

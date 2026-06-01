@@ -1,5 +1,5 @@
-from .response import Response
-from .request import Request
+from ..response import Response
+from ..request import Request
 
 
 class View:

@@ -22,8 +22,6 @@ class SyringeApp:
         return wrapped(request)
 
     def run(self, host="127.0.0.1", port=9999):
-        # print("Registered routes:", list(self.router._routes.keys()))
-        # print("Middleware:", self.middlewares)
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server.bind((host, port))
