@@ -9,7 +9,7 @@ app.use(logging_middleware)
 app.use(not_found_middleware)
 
 
-@app.route("/users/<user_id>")
+@app.route("/hello")
 def get_users(req):
     return Response("Hello")
 
