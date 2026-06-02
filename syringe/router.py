@@ -1,6 +1,5 @@
 import inspect
 from views import View
-from .response import Response
 
 
 class Router:
@@ -9,7 +8,7 @@ class Router:
 
     def route(self, path, methods=["GET"]):
         def decorator(fn):
-            # fn may be a function OR a View subclass — store either
+            # fn may be a function or a View subclass — store either
             if inspect.isclass(fn):
                 # register for every method the view supports
                 for method in fn._allowed_methods:

@@ -1,6 +1,4 @@
 class Headers:
-    """Descriptor: parses headers only when first accessed."""
-
     def __get__(self, obj, objtype=None):
         if obj is None:
             return self
