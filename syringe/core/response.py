@@ -1,4 +1,4 @@
-from .util.core import STATUS_TEXT
+from syringe.util.core import STATUS_TEXT
 
 
 class Response:
