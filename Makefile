@@ -3,7 +3,7 @@ install:
 	pip install -e .
 
 run:
-	python my_app/main.py
+	python sample_app/main.py
 
 
 dev: install run
