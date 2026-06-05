@@ -1,38 +1,29 @@
-from .router import Router
-from .response import Response
-from .request import Request
-from .util.core import apply_middlewares
+from syringe.core.router import resolve_handler
+from syringe.core.request import Request
+from syringe.util.core import apply_middlewares, autodiscover
 import socket
 
 
 class SyringeApp:
-    def __init__(self):
-        self.router = Router()
+    def __init__(self, app_name=None):
         self.middlewares = []
-
-    def route(self, path, **kwargs):
-        return self.router.route(path, **kwargs)
 
     def use(self, mw):
         self.middlewares.append(mw)
 
     def __call__(self, request):
-        handler = self.router.resolve(request)
+        handler = resolve_handler(request)
         wrapped = apply_middlewares(handler, self.middlewares)
         return wrapped(request)
 
     def _get_local_ip(self):
-        local_hostname = socket.gethostname()
-
-        ip_addresses = socket.gethostbyname_ex(local_hostname)[2]
-
+        ip_addresses = socket.gethostbyname_ex(socket.gethostname())[2]
         filtered_ips = [ip for ip in ip_addresses if not ip.startswith("127.")]
-
         first_ip = filtered_ips[:1]
-
         return first_ip[0]
 
     def run(self, host=None, port=9999):
+        autodiscover("my_app")  # Discover and import View classes from my_app folder
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         host, port = host if host is not None else self._get_local_ip(), port

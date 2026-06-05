@@ -1,8 +1,10 @@
 from syringe.views.base import View
-from syringe.response import Response
-from syringe.request import Request
+from syringe.core.response import Response
+from syringe.core.request import Request
+from syringe.core.router import route
 
 
+@route(path="/articles")
 class ArticleView(View):
     def get(self, req: Request):
         return Response("<h1>All articles</h1>")
@@ -14,6 +16,7 @@ class ArticleView(View):
         return Response("Article patched!")
 
 
+@route(path="/search")
 class SearchView(View):
     def get(self, request: Request):
 
