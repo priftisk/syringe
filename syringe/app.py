@@ -6,6 +6,11 @@ import socket
 
 class SyringeApp:
     def __init__(self, app_name=None):
+        if not app_name:
+            raise RuntimeError(
+                "Create an app name. Will be used to discover declared routes."
+            )
+        self.app_name = app_name
         self.middlewares = []
 
     def use(self, mw):
@@ -23,7 +28,9 @@ class SyringeApp:
         return first_ip[0]
 
     def run(self, host=None, port=9999):
-        autodiscover("my_app")  # Discover and import View classes from my_app folder
+        autodiscover(
+            self.app_name
+        )  # Discover and import View classes from sample_app folder
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         host, port = host if host is not None else self._get_local_ip(), port
