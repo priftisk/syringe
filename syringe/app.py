@@ -8,13 +8,14 @@ class SyringeApp:
     def __init__(self, app_name=None):
         if not app_name:
             raise RuntimeError(
-                "Create an app name. Will be used to discover declared routes."
+                "Create an app name. It will be used to discover declared routes."
             )
         self.app_name = app_name
         self.middlewares = []
 
-    def use(self, mw):
-        self.middlewares.append(mw)
+    def use(self, mw_list):
+        for mw in mw_list:
+            self.middlewares.append(mw)
 
     def __call__(self, request):
         handler = resolve_handler(request)

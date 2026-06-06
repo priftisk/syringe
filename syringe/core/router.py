@@ -7,12 +7,11 @@ def route(path, methods=["GET"]):
     def decorator(fn):
 
         if inspect.isclass(fn):
-
-            for method in getattr(fn, "_allowed_methods", []):
+            for method in getattr(
+                fn, "_allowed_methods", []
+            ):  # _allowed_methods is injected from the View class
                 register_route(method, path, fn)
         else:
-            print("Function detected")
-
             for method in methods:
                 register_route(method, path, fn)
 

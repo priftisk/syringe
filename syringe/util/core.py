@@ -23,7 +23,8 @@ def autodiscover(package_name):
     import importlib, pkgutil
 
     package = importlib.import_module(package_name)
-    print(package)
+    # print(package)
+
     for _, module_name, _ in pkgutil.walk_packages(
         package.__path__, package.__name__ + "."
     ):
