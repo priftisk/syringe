@@ -4,4 +4,7 @@ GET http://192.168.1.2:9999/articles
 POST http://192.168.1.2:9999/articles
 ###
 # GET http://192.168.1.2:9999/search?q=python&page=2 
+###
 GET http://192.168.1.2:9999/search/python/2
+###
+POST http://192.168.1.2:9999/search/python/2

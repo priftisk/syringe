@@ -13,6 +13,14 @@ STATUS_TEXT = {
 }
 
 
+def methods_match(route, request):
+    return request.method.upper() != route.method.upper()
+
+
+def params_match(route, request):
+    return len(route.params) == len(request.path._params_list)
+
+
 def apply_middlewares(handler, middlewares):
     for mw in reversed(middlewares):
         handler = mw(handler)

@@ -1,5 +1,5 @@
 from syringe.core.response import Response
-from syringe.core.request import Request
+from syringe.core.request.base import Request
 
 
 class View:

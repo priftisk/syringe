@@ -1,10 +1,10 @@
 from syringe.views.base import View
 from syringe.core.response import Response
-from syringe.core.request import Request
+from syringe.core.request.base import Request
 from syringe.core.router import route
 
 
-@route(path="/search/:query/:page")
+@route(path="/search/:query/:page", methods=["POST"])
 def index(req: Request):
     return Response(
         f"<h1>Results for {req.path.params.get("query")} on page {req.path.params.get("page")}</h1>"

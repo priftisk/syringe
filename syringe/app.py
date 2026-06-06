@@ -1,5 +1,5 @@
 from syringe.core.router import resolve_handler
-from syringe.core.request import Request
+from syringe.core.request.base import Request
 from syringe.util.core import apply_middlewares, autodiscover
 import socket
 

@@ -1,5 +1,5 @@
 from syringe.core.route import Route
-from syringe.core.request import Request
+from syringe.util.core import params_match, methods_match
 import inspect
 
 
@@ -19,19 +19,17 @@ def register_route(method, path, handler):
 
 
 def get_route(request):
-    base_match = Router._registry.get(request.path.base, None)
-    if not base_match:
+    base_path_match = Router._registry.get(request.path.base, None)
+    if not base_path_match:
         return None
-    for route, handler in base_match:
-        if _match(route, request):
+    for route, handler in base_path_match:
+        if not methods_match(route, request):
+            continue
+        if params_match(
+            route, request
+        ):  # Found matching base path with matching path params
+            request.path._set_params(
+                route.params
+            )  # Inject route params into path, so it constructs the path params dict for the request
             return handler
     return None
-
-
-def _match(route: Route, request: Request):
-    if len(route.params) == len(request.path._params_list):
-        request.path._set_params(
-            route.params
-        )  # Inject route params into path, so it constructs the path params for the request
-        return True
-    return False

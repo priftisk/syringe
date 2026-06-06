@@ -1,5 +1,5 @@
-from syringe.util.descriptor.headers import Headers
-from syringe.util.descriptor.query_params import QueryParams
+from syringe.core.request.headers import Headers
+from syringe.core.request.query_params import QueryParams
 from collections import defaultdict
 
 
