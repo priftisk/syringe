@@ -1,4 +1,5 @@
 from syringe.core.route import Route
+from syringe.views.base import View
 from syringe.util.core import params_match, methods_match
 import inspect
 
@@ -7,15 +8,17 @@ class Router:
     _registry = {}
 
 
-def register_route(method, path, handler):
-    new_route = Route(method, path)
+def register_route(methods, path, handler):
+    is_view = inspect.isclass(handler) and issubclass(handler, View)
+
+    new_route = Route(methods, path)
     if (
-        inspect.isclass(handler) and new_route.base_path in Router._registry
+        is_view and new_route.base_path in Router._registry
     ):  # is View and already registered entire class
         return
 
     Router._registry.setdefault(new_route.base_path, []).append((new_route, handler))
-    print(f"Registered: {new_route.method} {new_route.base_path}")
+    print(f"Registered: {new_route.methods} {new_route.base_path}")
 
 
 def get_route(request):

@@ -14,7 +14,7 @@ STATUS_TEXT = {
 
 
 def methods_match(route, request):
-    return request.method.upper() != route.method.upper()
+    return request.method.upper() in route.methods
 
 
 def params_match(route, request):

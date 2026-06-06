@@ -8,8 +8,8 @@ class RouteParam:
 
 
 class Route:
-    def __init__(self, method, raw_path):
-        self.method = method
+    def __init__(self, methods, raw_path):
+        self.methods = methods
         self.base_path = None
         self.params = []
         self._parse(raw_path)
