@@ -1,5 +1,5 @@
 from functools import wraps
-from .request import Request
+from .request.base import Request
 from .response import Response
 import time
 

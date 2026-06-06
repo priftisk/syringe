@@ -1,5 +1,5 @@
 from syringe.core.response import Response
-from syringe.core.request import Request
+from syringe.core.request.base import Request
 
 
 class View:
@@ -12,6 +12,7 @@ class View:
             if callable(getattr(cls, m, None))
         ]
 
+    # Returns handler from view based on http request method
     def dispatch(self, request: Request) -> Response:
         handler: callable[Request] = getattr(self, request.method.lower(), None)
         if handler is None:

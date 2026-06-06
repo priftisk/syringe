@@ -13,6 +13,14 @@ STATUS_TEXT = {
 }
 
 
+def methods_match(route, request):
+    return request.method.upper() != route.method.upper()
+
+
+def params_match(route, request):
+    return len(route.params) == len(request.path._params_list)
+
+
 def apply_middlewares(handler, middlewares):
     for mw in reversed(middlewares):
         handler = mw(handler)
@@ -23,7 +31,8 @@ def autodiscover(package_name):
     import importlib, pkgutil
 
     package = importlib.import_module(package_name)
-    print(package)
+    # print(package)
+
     for _, module_name, _ in pkgutil.walk_packages(
         package.__path__, package.__name__ + "."
     ):
