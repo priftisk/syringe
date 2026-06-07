@@ -20,9 +20,12 @@ def logging_middleware(handler):
 
         start = time.perf_counter()
         response: Response = handler(request)
-        elapsed = time.perf_counter() - start
+        elapsed_ms = time.perf_counter() - start
         print(
-            f"{request.method} {request._raw_path} -> {response.status} [{(elapsed * 1000):.5f}ms]"
+            f"{request.method:<6} "
+            f"{request._raw_path:<22} "
+            f"-> {response.status:<3} "
+            f"[{elapsed_ms:.4f} ms]"
         )
 
         return response

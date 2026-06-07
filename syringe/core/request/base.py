@@ -32,7 +32,6 @@ class Request:
     query_params = QueryParams()
 
     def __init__(self, raw: str):
-        self._raw = raw
         first_line = raw.split("\r\n")[0]
         self.method, self._raw_path, *_ = first_line.split()
         self.path = RequestPath(self._raw_path)

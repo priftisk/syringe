@@ -17,7 +17,7 @@ class SyringeApp:
         for mw in mw_list:
             self.middlewares.append(mw)
 
-    def __call__(self, request):
+    def __call__(self, request: Request):
         handler = resolve_handler(request)
         wrapped = apply_middlewares(handler, self.middlewares)
         return wrapped(request)
@@ -31,7 +31,7 @@ class SyringeApp:
     def run(self, host=None, port=9999):
         autodiscover(
             self.app_name
-        )  # Discover and import View classes from sample_app folder
+        )  # Discover and import View classes from app_name folder
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         host, port = host if host is not None else self._get_local_ip(), port
@@ -43,11 +43,16 @@ class SyringeApp:
             while True:
                 conn, _ = server.accept()
                 try:
-                    raw = conn.recv(4096).decode("utf-8")
-                    conn.sendall(bytes(self(Request(raw))))  # invokes self.__call__
+                    raw_data = conn.recv(4096).decode("utf-8")
+                    conn.sendall(
+                        bytes(self(Request(raw_data)))
+                    )  # invokes self.__call__
                 finally:
                     conn.close()
         except KeyboardInterrupt:
             print("\nShutting down...")
+        except Exception as e:
+            print("ERROR:", repr(e))
+
         finally:
             server.close()

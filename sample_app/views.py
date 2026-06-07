@@ -5,7 +5,7 @@ from syringe.core.router import route
 
 
 @route(path="/search/:query/:page", methods=["GET", "POST"])
-def index(req: Request):
+def search(req: Request):
     return Response(
         f"<h1>Results for {req.path.params.get("query")} on page {req.path.params.get("page")}</h1>"
     )
