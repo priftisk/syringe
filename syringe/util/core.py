@@ -1,3 +1,4 @@
+
 STATUS_TEXT = {
     200: "OK",
     201: "Created",
@@ -12,6 +13,16 @@ STATUS_TEXT = {
     500: "Internal Server Error",
 }
 
+def get_local_ip():
+    try:
+        import socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Create udp socket
+        s.connect(("8.8.8.8", 80))  # doesn't actually send data
+        ip = s.getsockname()[0] # See which ip was assigned by the OS to connect
+        s.close()
+        return ip
+    except Exception:
+        return "0.0.0.0"
 
 def methods_match(route, request):
     return request.method.upper() in route.methods

@@ -1,9 +1,15 @@
-install:
-# 	pip install --upgrade pip setuptools
-	pip install -e .
+VENV=.venv
+PYTHON=$(VENV)/bin/python
+PIP=$(VENV)/bin/pip
+
+venv:
+	python3 -m venv $(VENV)
+
+install: venv
+	$(PIP) install --upgrade pip setuptools
+	$(PIP) install -e .
 
 run:
-	python sample_app/main.py
-
+	$(PYTHON) sample_app/main.py
 
 dev: install run
