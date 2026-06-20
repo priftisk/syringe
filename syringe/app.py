@@ -1,10 +1,10 @@
 from syringe.core.context import make_context
 from syringe.core.request.base import Request
-from syringe.util.core import apply_middlewares, autodiscover
+from syringe.util.core import autodiscover
 from syringe.util.core import get_local_ip
 from syringe.core.context import RequestContext
 import socket
-
+from syringe.registry.middleware import register_middlewares,apply_middlewares
 
 class SyringeApp:
     def __init__(self, app_name=None):
@@ -13,16 +13,17 @@ class SyringeApp:
                 "Create an app name. Make sure it matches the name of the root folder of your app. It will be used to discover declared routes."
             )
         self.app_name = app_name
-        self.middlewares = []
+
+
 
     def use(self, mw_list):
-        for mw in mw_list:
-            self.middlewares.append(mw)
-
+        register_middlewares(mw_list)
+    
     def __call__(self, request: Request):
         context: RequestContext = make_context(request)
-        # wrapped = apply_middlewares(context.target, self.middlewares)
-        context.resolve()
+        apply_middlewares(context)
+        if not context.resolved:
+            context.resolve()
         return context.response
 
    
