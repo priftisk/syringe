@@ -6,7 +6,9 @@ POST http://192.168.1.2:9999/articles
 PATCH  http://192.168.1.2:9999/articles
 
 ###
-# GET http://192.168.1.2:9999/search?q=python&page=2 
+DELETE   http://192.168.1.2:9999/articles
+###
+GET http://192.168.1.2:9999/search?q=python&page=2 
 ###
 GET http://192.168.1.2:9999/search/python/2
 ###
