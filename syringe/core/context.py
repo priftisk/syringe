@@ -20,18 +20,6 @@ class RequestContext:
 
         self._set_target(request)
     
-    # @property
-    # def response(self):
-    #     return self._response
-
-    # @response.getter
-    # def response(self):
-    #     return self._response
-
-    # @response.setter
-    # def response(self, value):
-    #     if self.resolved: return
-    #     self._response = value
         
    
     def _set_target(self, request):
