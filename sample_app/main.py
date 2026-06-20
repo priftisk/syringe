@@ -1,9 +1,9 @@
 from syringe.app import SyringeApp
-from syringe.core.middleware import logging_middleware, not_found_middleware
+from syringe.core.middleware import LoggingMiddleware
 
 app = SyringeApp("sample_app")
 
-app.use([logging_middleware, not_found_middleware])
+app.use([LoggingMiddleware])
 
 
 if __name__ == "__main__":

@@ -28,14 +28,10 @@ def methods_match(route, request):
     return request.method.upper() in route.methods
 
 
-def params_match(route, request):
+def params_match(route, request): #TODO deeper check
     return len(route.params) == len(request.path._params_list)
 
 
-def apply_middlewares(handler, middlewares):
-    for mw in reversed(middlewares):
-        handler = mw(handler)
-    return handler
 
 
 def autodiscover(package_name):

@@ -21,7 +21,7 @@ def register_route(methods, path, handler):
     print(f"Registered: {new_route.methods} {new_route.base_path}")
 
 
-def get_route(request):
+def get_route_handler(request):
     base_path_match = Router._registry.get(request.path.base, None)
     if not base_path_match:
         return None

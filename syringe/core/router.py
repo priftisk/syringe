@@ -1,7 +1,5 @@
 import inspect
-from syringe.views.base import View
-from syringe.registry.router import register_route, get_route
-
+from syringe.registry.router import register_route, get_route_handler
 
 def route(path, methods=["GET"]):
     def decorator(fn):
@@ -15,20 +13,3 @@ def route(path, methods=["GET"]):
 
     return decorator
 
-
-def resolve_handler(request):
-    target = get_route(request)
-
-    if target is None:
-        return None
-
-    if inspect.isclass(target) and issubclass(target, View):  # If View class
-
-        def handler(req):
-            view = target()
-            response = view.dispatch(req)
-            return response
-
-        return handler
-
-    return target

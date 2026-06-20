@@ -1,34 +1,37 @@
-from syringe.core.router import resolve_handler
+from syringe.core.context import make_context
 from syringe.core.request.base import Request
-from syringe.util.core import apply_middlewares, autodiscover
+from syringe.util.core import autodiscover
 from syringe.util.core import get_local_ip
+from syringe.core.context import RequestContext
 import socket
-
+from syringe.registry.middleware import register_middlewares,apply_middlewares
 
 class SyringeApp:
     def __init__(self, app_name=None):
         if not app_name:
             raise RuntimeError(
-                "Create an app name. It will be used to discover declared routes."
+                "Create an app name. Make sure it matches the name of the root folder of your app. It will be used to discover declared routes."
             )
         self.app_name = app_name
-        self.middlewares = []
+
+
 
     def use(self, mw_list):
-        for mw in mw_list:
-            self.middlewares.append(mw)
-
+        register_middlewares(mw_list)
+    
     def __call__(self, request: Request):
-        handler = resolve_handler(request)
-        wrapped = apply_middlewares(handler, self.middlewares)
-        return wrapped(request)
+        context: RequestContext = make_context(request)
+        apply_middlewares(context)
+        if not context.resolved:
+            context.resolve()
+        return context.response
 
    
 
     def run(self, host=None, port=9999):
         autodiscover(
             self.app_name
-        )  # Discover and import View classes from app_name folder
+        )  # Discover and import View classes from folder named app_name
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         host, port = host if host is not None else get_local_ip(), port

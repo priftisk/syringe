@@ -28,8 +28,8 @@ class RequestPath:
 
 
 class Request:
-    headers = Headers()
-    query_params = QueryParams()
+    headers = Headers() #lazy-loaded
+    query_params = QueryParams() #lazy-loaded
 
     def __init__(self, raw: str):
         first_line = raw.split("\r\n")[0]
