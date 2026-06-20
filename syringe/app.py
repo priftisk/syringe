@@ -21,10 +21,9 @@ class SyringeApp:
 
     def __call__(self, request: Request):
         context: RequestContext = make_context(request)
-        # context.set_target(request)
-        print(context.target, context.request, context.response)
-        wrapped = apply_middlewares(context.target, self.middlewares)
-        return wrapped(request)
+        # wrapped = apply_middlewares(context.target, self.middlewares)
+        context.resolve()
+        return context.response
 
    
 

@@ -3,7 +3,7 @@ GET http://192.168.1.2:9999/articles
 ###
 POST http://192.168.1.2:9999/articles
 ###
-PATCH  http://192.168.1.2:9999/articles
+PATCH  http://192.168.1.2:9999/articlesss
 
 ###
 DELETE   http://192.168.1.2:9999/articles

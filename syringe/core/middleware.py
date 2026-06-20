@@ -2,8 +2,20 @@ from functools import wraps
 from .request.base import Request
 from .response import Response
 import time
+from abc import ABC
 
+class Middleware(ABC):
+    pass
+    
+    
+class LoggingMiddleware(Middleware):
+    def __init__(self):
+        super().__init__()
 
+    def _verify(self, context):
+        pass
+        
+    
 def not_found_middleware(handler):
     @wraps(handler)
     def wrapper(request):
