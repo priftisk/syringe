@@ -31,8 +31,8 @@ class RequestContext:
         if inspect.isclass(target) and issubclass(target, View):
             target = target().dispatch(context=self) # Asks the view for the specific handler based on request path
 
-        elif not isinstance(target, types.FunctionType):
-            return  # Not found
+        elif not isinstance(target, types.FunctionType): # Not found
+            return  #TODO Maybe dont fail silenty here
 
         self.target = target
 
@@ -41,7 +41,7 @@ class RequestContext:
         if(self.resolved): return # resolve() called already
         self.resolved = True
         if not self.target: # Return 404 NOT FOUND
-            self.response = Response(body=f"<h1>{self.request}NOT FOUND</h1>", status=404)
+            self.response = Response(body=f"<h1>{self.request._raw_path}NOT FOUND</h1>", status=404)
             return
         self.response = self.target(self.request)
         

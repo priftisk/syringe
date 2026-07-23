@@ -1,7 +1,7 @@
 from syringe.app import SyringeApp
 from syringe.core.middleware import LoggingMiddleware
 
-app = SyringeApp("sample_app")
+app = SyringeApp("sampl_app")
 
 app.use([LoggingMiddleware])
 

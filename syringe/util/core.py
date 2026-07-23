@@ -37,8 +37,10 @@ def params_match(route, request): #TODO deeper check
 def autodiscover(package_name):
     import importlib, pkgutil
 
-    package = importlib.import_module(package_name)
-    # print(package)
+    try:
+        package = importlib.import_module(package_name)
+    except ModuleNotFoundError:
+        raise RuntimeError(f"Failed to find module with name {package_name}")
 
     for _, module_name, _ in pkgutil.walk_packages(
         package.__path__, package.__name__ + "."
