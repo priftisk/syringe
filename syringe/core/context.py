@@ -6,6 +6,7 @@ from syringe.core.response import Response
 from syringe.core.request.base import Request
 
 # A new RequestContext is created for every new request.
+# Context is resolved once per request-reponse lifecycle.
 class RequestContext:
     def __init__(self, request=None):
         if request is None:
@@ -41,7 +42,7 @@ class RequestContext:
         if(self.resolved): return # resolve() called already
         self.resolved = True
         if not self.target: # Return 404 NOT FOUND
-            self.response = Response(body=f"<h1>{self.request._raw_path}NOT FOUND</h1>", status=404)
+            self.response = Response(body=f"<h1>{self.request._raw_path} NOT FOUND</h1>", status=404)
             return
         self.response = self.target(self.request)
         
